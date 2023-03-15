@@ -1,0 +1,30 @@
+* {
+    font-family: Arial, Helvetica, sans-serif;
+    align-items: center;
+    justify-content: center;
+}
+
+
+header {
+    background-color: aquamarine;
+    display: flex;
+}
+
+header h2{
+    margin:50px;
+}
+
+.start{
+    background-color: blue;
+}
+
+.questionCard{
+    background-color: brown;
+
+}
+
+.end{
+    background-color: cyan;
+
+}
+
