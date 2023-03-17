@@ -9,9 +9,13 @@
   </head>
   <body>
     <header>
-        <h2>Veiw HighScores</h2>
+        <h2 id="highScoreView">Veiw HighScores</h2>
         <h2>Time left: <span id=timer>000</span></h2>
+        <h2>Score: <span id="curScore">000</span></h2>
     </header>
+    <ul class="highscoreList">
+        <li>Test element</li>
+    </ul>
     <!-- This is the start block -->
     <section class="start">
         <h1>Coding quiz challenge</h1>
@@ -33,7 +37,7 @@
         <h1>HighScores</h1>
         <div>
             <p>Enter initials</p>
-            <input>
+            <input type="text" id="initials">
             <button id="submit">Submit</button>
         </div>
     </section>

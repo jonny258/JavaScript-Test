@@ -6,6 +6,10 @@ const startButton = document.querySelector("#startButton");
 const submitButton = document.querySelector("#submit");
 
 const timer = document.querySelector("#timer")
+const input = document.querySelector("#initials")
+const curScore = document.querySelector("#curScore")
+const highScoreView = document.querySelector("#highScoreView")
+const highScoreList = document.querySelector(".highscoreList")
 
 const questionHeader = document.querySelector("#questionTitle");
 const answer1 = document.querySelector("#answer1");
@@ -58,11 +62,15 @@ const questions = [
 
 let questionCount = 0;
 let timeLeft = 30;
+let score = 0;
+let timerInterval;
+let highScoresArr = [];
 
 function isRight(submitted, correct) {
   if (submitted === correct) {
     console.log("correct");
-
+    score += 10;
+    curScore.textContent = score;
     answer1.removeEventListener("click", a1);
     answer2.removeEventListener("click", a2);
     answer3.removeEventListener("click", a3);
@@ -72,12 +80,17 @@ function isRight(submitted, correct) {
     if(questionCount <= 3){
         runQuestions();
     }else{
+        score += timeLeft;
+        curScore.textContent = score;
+        clearInterval(timerInterval)
+        timer.textContent = "000";
         questionsClass.style.display = "none";
         endClass.style.display = "block";
     }
   } else {
     console.log("wrong");
 
+    timeLeft -= 5;
     answer1.removeEventListener("click", a1);
     answer2.removeEventListener("click", a2);
     answer3.removeEventListener("click", a3);
@@ -87,6 +100,10 @@ function isRight(submitted, correct) {
     if(questionCount <= 3){
         runQuestions();
     }else{
+        score += timeLeft;
+        curScore.textContent = score;
+        clearInterval(timerInterval)
+        timer.textContent = "000";
         questionsClass.style.display = "none";
         endClass.style.display = "block";
     }
@@ -115,7 +132,7 @@ function runQuestions() {
 }
 
 function startTimer() {
-    let timerInterval = setInterval(function(){
+    timerInterval = setInterval(function(){
         timer.textContent = timeLeft;
         timeLeft--
         if( timeLeft === 0){
@@ -127,17 +144,33 @@ function startTimer() {
     }, 1000)
 }
 
+function submitInitials() {
+    if(input.value.length > 3){
+        alert("Please enter just your initials")
+        input.value = ""
+        submitInitials()
+    }
+    let gameInput = input.value + "  " + score;
+    highScoresArr.push(gameInput);
+    console.log(highScoresArr)
+    localStorage.setItem("Highscores", highScoresArr)
+    input.value = ""
+
+}
+
+
 
 
 startButton.addEventListener("click", function () {
   startClass.style.display = "none";
   questionsClass.style.display = "block";
+  curScore.textContent = 0;
   runQuestions();
   startTimer()
 });
 
+highScoreView.addEventListener("click", function(){
+    highScoreList.style.display = "block"
+})
 
-submitButton.addEventListener("click", function () {
-  endClass.style.display = "none";
-  startClass.style.display = "block";
-});
+submitButton.addEventListener("click", submitInitials)
