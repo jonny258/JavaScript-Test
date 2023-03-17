@@ -3,8 +3,9 @@ const questionsClass = document.querySelector(".questionCard");
 const endClass = document.querySelector(".end");
 
 const startButton = document.querySelector("#startButton");
-const nextQuestionsButton = document.querySelector("#endQuestions");
 const submitButton = document.querySelector("#submit");
+
+const timer = document.querySelector("#timer")
 
 const questionHeader = document.querySelector("#questionTitle");
 const answer1 = document.querySelector("#answer1");
@@ -56,6 +57,7 @@ const questions = [
 ];
 
 let questionCount = 0;
+let timeLeft = 30;
 
 function isRight(submitted, correct) {
   if (submitted === correct) {
@@ -75,7 +77,7 @@ function isRight(submitted, correct) {
     }
   } else {
     console.log("wrong");
-    
+
     answer1.removeEventListener("click", a1);
     answer2.removeEventListener("click", a2);
     answer3.removeEventListener("click", a3);
@@ -112,22 +114,27 @@ function runQuestions() {
   answer4.addEventListener("click", a4);
 }
 
+function startTimer() {
+    let timerInterval = setInterval(function(){
+        timer.textContent = timeLeft;
+        timeLeft--
+        if( timeLeft === 0){
+            clearInterval(timerInterval);
+            timer.textContent = "000";
+            questionsClass.style.display = "none";
+            endClass.style.display = "block";
+        }
+    }, 1000)
+}
+
 
 
 startButton.addEventListener("click", function () {
   startClass.style.display = "none";
   questionsClass.style.display = "block";
-  runQuestions(questionCount);
-});
-
-nextQuestionsButton.addEventListener("click", function () {
-  if (questionCount > 4) {
-    questionsClass.style.display = "none";
-    endClass.style.display = "block";
-  }
   runQuestions();
+  startTimer()
 });
-
 
 
 submitButton.addEventListener("click", function () {

@@ -20,11 +20,12 @@ header h2{
 
 .questionCard{
     background-color: brown;
+    display: none;
 
 }
 
 .end{
     background-color: cyan;
-
+    display: none;
 }
 
