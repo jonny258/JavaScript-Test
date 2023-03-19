@@ -64,12 +64,26 @@ let questionCount = 0;
 let timeLeft = 30;
 let score = 0;
 let timerInterval;
-let highScoresArr = [];
+let highScoresArr = JSON.parse(localStorage.getItem("Highscores"));
+let highscoreflip = true;
+
+
+function finished(){
+    score += timeLeft;
+    curScore.textContent = score;
+    clearInterval(timerInterval)
+    timer.textContent = "000";
+    questionsClass.style.display = "none";
+    endClass.style.display = "block";
+}
+
 
 function isRight(submitted, correct) {
   if (submitted === correct) {
     console.log("correct");
+
     score += 10;
+    //make all the below then things into one fumction
     curScore.textContent = score;
     answer1.removeEventListener("click", a1);
     answer2.removeEventListener("click", a2);
@@ -80,12 +94,7 @@ function isRight(submitted, correct) {
     if(questionCount <= 3){
         runQuestions();
     }else{
-        score += timeLeft;
-        curScore.textContent = score;
-        clearInterval(timerInterval)
-        timer.textContent = "000";
-        questionsClass.style.display = "none";
-        endClass.style.display = "block";
+        finished()
     }
   } else {
     console.log("wrong");
@@ -100,12 +109,7 @@ function isRight(submitted, correct) {
     if(questionCount <= 3){
         runQuestions();
     }else{
-        score += timeLeft;
-        curScore.textContent = score;
-        clearInterval(timerInterval)
-        timer.textContent = "000";
-        questionsClass.style.display = "none";
-        endClass.style.display = "block";
+        finished()
     }
   }
 }
@@ -123,8 +127,6 @@ function runQuestions() {
   answer3.textContent = questions[questionCount][1].c;
   answer4.textContent = questions[questionCount][1].d;
 
-  console.log(questionCount);
-
   answer1.addEventListener("click", a1);
   answer2.addEventListener("click", a2);
   answer3.addEventListener("click", a3);
@@ -136,10 +138,7 @@ function startTimer() {
         timer.textContent = timeLeft;
         timeLeft--
         if( timeLeft === 0){
-            clearInterval(timerInterval);
-            timer.textContent = "000";
-            questionsClass.style.display = "none";
-            endClass.style.display = "block";
+            finished()
         }
     }, 1000)
 }
@@ -150,16 +149,25 @@ function submitInitials() {
         input.value = ""
         submitInitials()
     }
+    if(highScoresArr === null){
+        highScoresArr = []
+    };
     let gameInput = input.value + "  " + score;
-    highScoresArr.push(gameInput);
     console.log(highScoresArr)
-    localStorage.setItem("Highscores", highScoresArr)
+    highScoresArr.push(gameInput)
+    localStorage.setItem("Highscores", JSON.stringify(highScoresArr))
     input.value = ""
 
 }
 
-
-
+function highScoreFunction() {
+    highScoreList.innerHTML = ""
+    console.log(highScoresArr)
+    for(let i=0; i<highScoresArr.length; i++){
+        let singleHighscore = document.createElement("li");
+        singleHighscore.textContent = highScoresArr[i];
+        highScoreList.appendChild(singleHighscore);
+    }}
 
 startButton.addEventListener("click", function () {
   startClass.style.display = "none";
@@ -170,7 +178,16 @@ startButton.addEventListener("click", function () {
 });
 
 highScoreView.addEventListener("click", function(){
-    highScoreList.style.display = "block"
+    if(highscoreflip){
+        highScoreList.style.display = "block"
+        highScoreView.textContent = "Close HighScores"
+        highScoreFunction()
+    }else{
+        highScoreList.style.display = "none"
+        highScoreView.textContent = "Veiw HighScores"
+    }
+    highscoreflip = !highscoreflip
+
 })
 
 submitButton.addEventListener("click", submitInitials)
