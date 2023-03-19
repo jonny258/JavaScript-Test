@@ -4,37 +4,117 @@
     justify-content: center;
 }
 
+:root {
+    --dark-color: #00235B;
+    --light-color: #FFDD83;
+    --three-color: #E21818;
+    --four-color: #98DFD6;
+
+  }
+
 
 header {
-    background-color: aquamarine;
+    background-color: var(--dark-color);
+    color: var(--light-color);
+    border-bottom:15px solid var(--three-color);
     display: flex;
 }
 
 header h2{
-    margin:50px;
+    margin: 50px;
+    padding: 8px;
 }
 
+button{
+    font-weight: 600;
+    background-color: var(--light-color);
+    color: var(--dark-color);
+    padding: 8px;
+    border-radius: 8px;
+}
+
+
+
+
+/* all the cards that are sometimes hidden */
 .start{
-    background-color: blue;
+    padding: 100px;
+    margin:100px;
+    background-color: var(--four-color);
+    align-items: center;
+    justify-content: center;
+    border: 15px solid var(--dark-color);
+    border-radius: 60px;
+    font-size: 125%;
+}
+
+.start p{
+    font-size: 20px;
 }
 
 .questionCard{
-    background-color: brown;
-    display: none;
+    padding: 100px;
+    margin:100px;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--dark-color);
+    color: var(--light-color);
+    border:15px solid var(--three-color);
+    border-radius: 60px;
 
+    display: none;
 }
 
-.end{
-    background-color: cyan;
-    display: none;
+.questionCard h2{
+    font-size: 250%;
+}
 
+
+
+.end{
+    padding: 100px;
+    margin:100px;
+    background-color: var(--four-color);
+    align-items: center;
+    justify-content: center;
+    border: 15px solid var(--dark-color);
+    border-radius: 60px;
+    font-size: 125%;
+
+    display: none;
 }
 
 .highscoreList{
+    line-height: 125%;
+    font-size: 125%;
+    font-weight: 600;
+    list-style-type: none;
+    text-align: center;
+    text-decoration: none;
     display: none;
+    border-top: 5px solid black;
+    border-bottom: 5px solid black;
 }
 
 .restart{
-    background-color: coral;
+    padding: 100px;
+    margin:100px;
+    background-color: var(--four-color);
+    align-items: center;
+    justify-content: center;
+    border: 15px solid var(--dark-color);
+    border-radius: 60px;
+    font-size: 125%;
+
     display: none;
+}
+
+#highScoreView:hover {
+    background-color: var(--light-color);
+    color: var(--dark-color);
+    border-radius: 8px;
+}
+
+.questionCard h3:hover {
+    text-decoration: underline;
 }
