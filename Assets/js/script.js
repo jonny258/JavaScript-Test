@@ -1,15 +1,18 @@
+// These are the different pages that are shown
 const startClass = document.querySelector(".start");
 const questionsClass = document.querySelector(".questionCard");
 const endClass = document.querySelector(".end");
+const restartPage = document.querySelector(".restart")
 
 const startButton = document.querySelector("#startButton");
 const submitButton = document.querySelector("#submit");
+const restartButton = document.querySelector("#restartButton");
 
-const timer = document.querySelector("#timer")
-const input = document.querySelector("#initials")
-const curScore = document.querySelector("#curScore")
-const highScoreView = document.querySelector("#highScoreView")
-const highScoreList = document.querySelector(".highscoreList")
+const timer = document.querySelector("#timer");
+const input = document.querySelector("#initials");
+const curScore = document.querySelector("#curScore");
+const highScoreView = document.querySelector("#highScoreView");
+const highScoreList = document.querySelector(".highscoreList");
 
 const questionHeader = document.querySelector("#questionTitle");
 const answer1 = document.querySelector("#answer1");
@@ -17,6 +20,7 @@ const answer2 = document.querySelector("#answer2");
 const answer3 = document.querySelector("#answer3");
 const answer4 = document.querySelector("#answer4");
 
+//This is the array that my functions pull from to show the different questions
 const questions = [
   [
     "What is the difference between '==' and '===' in JavaScript?",
@@ -60,6 +64,7 @@ const questions = [
   ],
 ];
 
+//defining the varibles in the global scope and pulling the previous scores into high score array
 let questionCount = 0;
 let timeLeft = 30;
 let score = 0;
@@ -77,61 +82,56 @@ function finished(){
     endClass.style.display = "block";
 }
 
+//resets the event listeners then either runs the next question or ends the quiz
+function nextQuestion(){
+    answer1.removeEventListener("click", a1);
+    answer2.removeEventListener("click", a2);
+    answer3.removeEventListener("click", a3);
+    answer4.removeEventListener("click", a4);
 
+    questionCount++;
+    if(questionCount <= 3){
+        runQuestions();
+    }else{
+        finished()
+    }
+}
+
+//Determines whether the answer pressed is the correct one
 function isRight(submitted, correct) {
   if (submitted === correct) {
-    console.log("correct");
-
     score += 10;
-    //make all the below then things into one fumction
     curScore.textContent = score;
-    answer1.removeEventListener("click", a1);
-    answer2.removeEventListener("click", a2);
-    answer3.removeEventListener("click", a3);
-    answer4.removeEventListener("click", a4);
-
-    questionCount++;
-    if(questionCount <= 3){
-        runQuestions();
-    }else{
-        finished()
-    }
+    nextQuestion()
   } else {
-    console.log("wrong");
-
     timeLeft -= 5;
-    answer1.removeEventListener("click", a1);
-    answer2.removeEventListener("click", a2);
-    answer3.removeEventListener("click", a3);
-    answer4.removeEventListener("click", a4);
-
-    questionCount++;
-    if(questionCount <= 3){
-        runQuestions();
-    }else{
-        finished()
-    }
+    nextQuestion()
   }
 }
 
+//These fuctions below just pass parameters to the "isRight" function they have to be seperate and in the 
+//global scope so they can work with the removeEventListeners
 function a1() {isRight("a", questions[questionCount][2])};
 function a2() {isRight("b", questions[questionCount][2])};
 function a3() {isRight("c", questions[questionCount][2])};
 function a4() {isRight("d", questions[questionCount][2])};
 
+
 function runQuestions() {
-  
+  //Changes the text on the questions and answers
   questionHeader.textContent = questions[questionCount][0];
   answer1.textContent = questions[questionCount][1].a;
   answer2.textContent = questions[questionCount][1].b;
   answer3.textContent = questions[questionCount][1].c;
   answer4.textContent = questions[questionCount][1].d;
 
+  //Makes all the questions clickable
   answer1.addEventListener("click", a1);
   answer2.addEventListener("click", a2);
   answer3.addEventListener("click", a3);
   answer4.addEventListener("click", a4);
 }
+
 
 function startTimer() {
     timerInterval = setInterval(function(){
@@ -144,11 +144,13 @@ function startTimer() {
 }
 
 function submitInitials() {
+    //Makes sure that what was submitted is only the initials if not the function resets
     if(input.value.length > 3){
         alert("Please enter just your initials")
         input.value = ""
         submitInitials()
     }
+    //if the localstoreage is empty this sets highScoresArr to an empty array so that the push method still works
     if(highScoresArr === null){
         highScoresArr = []
     };
@@ -156,18 +158,33 @@ function submitInitials() {
     console.log(highScoresArr)
     highScoresArr.push(gameInput)
     localStorage.setItem("Highscores", JSON.stringify(highScoresArr))
+    endClass.style.display = "none"
+    restartPage.style.display = "block"
     input.value = ""
-
+    
 }
 
 function highScoreFunction() {
     highScoreList.innerHTML = ""
-    console.log(highScoresArr)
     for(let i=0; i<highScoresArr.length; i++){
+        //creates li elements for each highscore then displays them
         let singleHighscore = document.createElement("li");
         singleHighscore.textContent = highScoresArr[i];
         highScoreList.appendChild(singleHighscore);
-    }}
+    }
+}
+
+//returns everything to default so that the game can be played again
+restartButton.addEventListener("click", function(){
+    startClass.style.display = "block";
+    restartPage.style.display = "none";
+    questionCount = 0;
+    timeLeft = 30;
+    score = 0;
+    timerInterval;
+    highScoresArr = JSON.parse(localStorage.getItem("Highscores"));
+    highscoreflip = true;
+})
 
 startButton.addEventListener("click", function () {
   startClass.style.display = "none";
@@ -177,6 +194,7 @@ startButton.addEventListener("click", function () {
   startTimer()
 });
 
+//This lets me open and close the highscore list using the same event listener
 highScoreView.addEventListener("click", function(){
     if(highscoreflip){
         highScoreList.style.display = "block"

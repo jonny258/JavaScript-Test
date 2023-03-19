@@ -26,9 +26,15 @@ header h2{
 
 .end{
     background-color: cyan;
+    display: none;
 
 }
 
 .highscoreList{
+    display: none;
+}
+
+.restart{
+    background-color: coral;
     display: none;
 }
